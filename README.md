@@ -8,8 +8,19 @@ OpenCode V2 does not ship a generic `mkdir`/`rmdir`/`rm`. This plugin fills that
 
 ## Installing
 
+From a release (recommended):
+
+1. Download the `opencode-fs-plugin-<version>.tgz` artifact from the release's pipeline run (Gitea → repository → Actions → the run → **Artifacts**).
+2. Install it into your project:
+
+   ```bash
+   npm install ./opencode-fs-plugin-0.1.0.tgz
+   ```
+
+Or from a source checkout:
+
 ```bash
-npm install
+npm install /path/to/opencode-fs-plugin
 ```
 
 The plugin ships as an ESM module (`type: module`, export `.` → `./src/index.ts`).
@@ -22,13 +33,13 @@ Choose one of the two options:
 
 ```jsonc
 {
-  "plugins": ["./src/index.ts"]
+  "plugins": ["opencode-fs-plugin"]
 }
 ```
 
 ### 2. As a project plugin
 
-Place the file under `.opencode/plugins/` (or symlink it there) and OpenCode loads it automatically.
+Place the plugin under `.opencode/plugins/` (or symlink it there) and OpenCode loads it automatically.
 
 ## Options
 
@@ -40,7 +51,7 @@ Place the file under `.opencode/plugins/` (or symlink it there) and OpenCode loa
 {
   "plugins": [
     {
-      "path": "./src/index.ts",
+      "path": "opencode-fs-plugin",
       "options": { "root": "/absolute/project/dir" }
     }
   ]
