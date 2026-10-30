@@ -1,3 +1,8 @@
+/*
+ * SPDX-License-Identifier: EPL-2.0
+ * license-wizard managed-header v1 EPL-2.0 short 73897e75828f
+ */
+
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { Plugin } from "@opencode/plugin";
