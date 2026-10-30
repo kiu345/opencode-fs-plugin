@@ -1,0 +1,6 @@
+# mise configuration - pins the Node.js toolchain so local dev and CI
+# (jdx/mise-action in .gitea/workflows/release.yml) use the same version.
+# Docs: https://mise.jdx.dev
+
+[tools]
+node = "22"

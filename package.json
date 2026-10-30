@@ -1,0 +1,30 @@
+{
+  "name": "opencode-fs-plugin",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "OpenCode 2 plugin: sandboxed mkdir, rmdir and rm tools (symlink-escape safe).",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "node test/sandbox.test.ts"
+  },
+  "peerDependencies": {
+    "@opencode/plugin": "^2.2.2"
+  },
+  "peerDependenciesMeta": {
+    "@opencode/plugin": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@opencode/plugin": "^2.2.2",
+    "@types/node": "^24.0.0",
+    "typescript": "^5.6.0"
+  }
+}

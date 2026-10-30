@@ -1,0 +1,54 @@
+# opencode-fs-plugin - Gitea Actions release pipeline
+# Place in .gitea/workflows/ to be picked up by Gitea 1.21+
+#
+# Triggered when a release is published (e.g. from the repo's Releases UI).
+# Single job: runs the prod build and uploads the resulting npm tarball as a
+# run artifact (available in the run's Artifacts list / pipeline cache).
+
+name: Release
+
+on:
+  release:
+    types: [published]
+  # Allows testing the pipeline without creating a real release.
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Prod Build & Upload
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Inject internal CA
+        run: |
+          echo "${{ vars.QNET_CA_CERT }}" | sudo tee /usr/local/share/ca-certificates/qnet-ca.crt > /dev/null
+          echo "${{ vars.WEBCA_CERT }}" | sudo tee /usr/local/share/ca-certificates/web-ca.crt > /dev/null
+          sudo update-ca-certificates
+
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup mise (node)
+        env:
+          MISE_ENABLE_TOOLS: node
+        uses: jdx/mise-action@v4
+        with:
+          install: true
+          cache: true
+
+      - name: Prod build
+        run: |
+          npm install --omit=dev --omit=peer --omit=optional
+          npm pack
+
+      - name: Upload artifact
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v7
+        # Node.js uses its own CA store, not the system one where the internal
+        # CA was injected; without this the artifact API call fails TLS.
+        env:
+          NODE_OPTIONS: --use-openssl-ca
+        with:
+          name: opencode-fs-plugin
+          path: opencode-fs-plugin-*.tgz
